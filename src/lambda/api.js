@@ -15,7 +15,7 @@ const welcome = async () => {
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: "Welcome to the serverless users API!",
+            message: "Welcome to the serverless realesstate users API!",
         }),
     };
 };
