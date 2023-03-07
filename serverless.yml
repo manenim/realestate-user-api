@@ -21,7 +21,7 @@ functions:
     handler: /lambda/api.welcome
     name: welcome
     memorySize: 128 # mb
-    timeout: 5 # seconds
+    timeout: 5 # second
     events:
       - http:
           path: /
