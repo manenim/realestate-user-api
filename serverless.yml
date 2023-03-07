@@ -1,0 +1,147 @@
+service: users-api
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-2
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.usersTableName}
+  
+
+custom:
+  usersTableName: users-table-${self:provider.stage}
+  
+plugins:
+  - serverless-auto-swagger
+  - serverless-iam-roles-per-function
+
+functions:
+  welcome:
+    handler: /lambda/api.welcome
+    name: welcome
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /
+          method: GET
+
+  # mani:
+  #   handler: api.getPostByAuthor
+  #   name: mani
+  #   memorySize: 128 # mb
+  #   timeout: 5 # seconds
+  #   events:
+  #     - http:
+  #         path: posts/{author}
+  #         method: GET
+  #   iamRoleStatements:
+  #     - Effect: "Allow"
+  #       Action:
+  #         - "dynamodb:Query"  # this is how you comment things in YAML
+  #         - "dynamodb:Scan"
+  #         - "dynamodb:Get*"
+  #       Resource: arn:aws:dynamodb:us-east-2:749333884984:table/posts-table-dev/index/author-content-index
+  getUser:
+    handler: lambda/api.getUser
+    name: get-user 
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: user/{userId}
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: "*"
+  createUser:
+    handler: lambda/api.createUser
+    name: create-user
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: user
+          method: POST
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+        Resource: "*"
+  updateUser:
+    handler: lamdas/api.updateUser
+    name: update-user
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: user/{userId}
+          method: PUT
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+        Resource: "*"
+    
+  deleteUser:
+    handler: lambda/api.deleteUser
+    name: delete-user
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: user/{userId}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: "*"
+  getAllUsers:
+    handler: api.getAllUsers
+    name: get-all-users
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: users
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: "*"
+        
+    
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.usersTableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          # - AttributeName: author
+          #   AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
+          #GSIs
+        # GlobalSecondaryIndexes:
+        #   - IndexName: author-content-index
+        #     KeySchema:
+        #       - AttributeName: author
+        #         KeyType: HASH
+        #     Projection:
+        #       ProjectionType: ALL
+        #     ProvisionedThroughput:
+        #       ReadCapacityUnits: 1
+        #       WriteCapacityUnits: 1
+
