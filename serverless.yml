@@ -57,7 +57,7 @@ functions:
           - "dynamodb:PutItem"
         Resource: "*"
   updateUser:
-    handler: lamdas/api.updateUser
+    handler: lamda/api.updateUser
     name: update-user
     memorySize: 128 # mb
     timeout: 5 # seconds
