@@ -20,69 +20,6 @@ const welcome = async () => {
     };
 };
 
-// get post by author where author is mani and the author attribute is a global secondary index
-// const getPostByAuthor = async (event) => {
-//     console.log('entered')
-//     const response = { statusCode: 200 };
-
-   
-
-// db.query(params, (err, data) => {
-//   if (err) {
-//     console.error("erre",  e);
-//         response.statusCode = 500;
-//         response.body = JSON.stringify({
-//             message: "Failed to create post.",
-//             errorMsg: e.message,
-//             errorStack: e.stack,
-//         });
-//   } else {
-//       console.log('data', data)
-//      // Returns the matching items
-//       response.body = JSON.stringify({
-//           message: "Successfully retrieved post.",
-//           data: data.Items.map((item) => unmarshall(item)),
-//       });
-//   }
-// });
-    
-    // try {
-    //      const params = {
-    //     TableName: process.env.DYNAMODB_TABLE_NAME,
-    //     IndexName: "author-content-index", // Name of the GSI
-    //     ExpressionAttributeValues: marshall({
-    //         ":author":  event.pathParameters.author // Specify the value of the author to query
-    //         }),
-    //     KeyConditionExpression: "author = :author",
-  
-    //     };
-        // const { Items } = await db.query(params).promise();
-        // console.log('Items', Items)
-        // response.body = JSON.stringify({
-        //     message: "Successfully retrieved post.",
-        //     data: Items.map((item) => unmarshall(item)),
-        // });
-//         const command = new QueryCommand(params);
-//         const data = await db.send(command);
-//         console.log('data', data)
-//         response.body = JSON.stringify({
-//             message: "Successfully retrieved post.",
-//             data: data.Items.map((item) => unmarshall(item)),
-//         });
-//     } catch (err) {
-//         console.error("erre",  err);
-//         response.statusCode = 500;
-//         response.body = JSON.stringify({
-//             message: "Failed to find posts.",
-//             errorMsg: err.message,
-//             errorStack: err.stack,
-//         });
-        
-//     }
-
-//     return response;
-// }
-
 
 
 const getUser = async (event) => {
